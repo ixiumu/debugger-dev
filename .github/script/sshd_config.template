@@ -21,6 +21,6 @@ AllowUsers $USER
 AuthorizedKeysFile $PWD/authorized_keys
 
 # Force to start tmux on login
-ForceCommand tmux attach
+#ForceCommand tmux attach
 
 # vim: ft=sshdconfig
