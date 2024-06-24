@@ -59,7 +59,7 @@ sshd_pid=$!
 
 # Use `sed -u` (unbuffered) otherwise logs don't show up in the UI
 echo 'Starting Cloudflare tunnel...'
-./cloudflared tunnel --no-autoupdate run --token "$CLOUDFLARED_TUNNEL_TOKEN" 2>&1 | tee cloudflared.log | sed -u 's/^/cloudflared: /' &
+./cloudflared tunnel --no-autoupdate run --token "$CLOUDFLARED_TUNNEL_TOKEN" 1>/tmp/cloudflared.log 2>&1 | tee cloudflared.log | sed -u 's/^/cloudflared: /' &
 cloudflared_pid=$!
 
 #
