@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set script timeout (minutes)
-timeout=30
+timeout=1
 
 # Convert timeout to seconds
 timeout_seconds=$((timeout * 60))
