@@ -55,7 +55,7 @@ echo 'Starting SSH server...'
 sshd_pid=$!
 
 echo 'Starting tmux session...'
-(cd "$GITHUB_WORKSPACE" && tmux new-session -d -s debug)
+(cd "$GITHUB_WORKSPACE" && tmux new-session -d -s debug -t $(tty))
 
 # Use `sed -u` (unbuffered) otherwise logs don't show up in the UI
 echo 'Starting Cloudflare tunnel...'
