@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set script timeout (minutes)
-timeout=5
+timeout=1
 
 # Convert timeout to seconds
 timeout_seconds=$((timeout * 60))
@@ -14,6 +14,8 @@ while true; do
   # Get the current number of active SSH user connections
   #current_user_count=$(who | grep -c "pts/")
   current_user_count=$(ps x | grep sshd | grep -c @)
+  
+  echo "Active user connections: ${current_user_count}"
 
   if [ $current_user_count -gt 0 ]; then
     # Users are connected
