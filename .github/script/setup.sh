@@ -56,8 +56,6 @@ echo 'Starting SSH server...'
 /usr/sbin/sshd -f sshd_config -D &
 sshd_pid=$!
 
-#echo 'Starting tmux session...'
-#(cd "$GITHUB_WORKSPACE" && tmux new-session -d -s debug)
 
 # Use `sed -u` (unbuffered) otherwise logs don't show up in the UI
 echo 'Starting Cloudflare tunnel...'
@@ -71,6 +69,10 @@ cloudflared_pid=$!
 # don't) but it'll also exit when all tmux sessions are over, which is
 # fine with us!
 #
+
+#echo 'Starting tmux session...'
+#(cd "$GITHUB_WORKSPACE" && tmux new-session -d -s debug)
+
 #tmux wait-for channel
 
 "$SCRIPT_PATH/wait.sh"

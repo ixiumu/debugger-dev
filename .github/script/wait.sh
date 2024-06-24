@@ -3,6 +3,9 @@
 # Convert timeout to seconds
 timeout_seconds=$((2 * 60))
 
+# Get current timestamp
+start_time=$(date +%s)
+
 # Initialize user connection count
 user_count=0
 
@@ -10,6 +13,9 @@ user_count=0
 while true; do
   # Get the current number of active SSH user connections
   current_user_count=$(who | grep -c "pts/")
+
+  echo $current_user_count
+  echo $start_time
 
   if [ $current_user_count -gt 0 ]; then
     # Users are connected
