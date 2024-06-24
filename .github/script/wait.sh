@@ -13,7 +13,7 @@ start_time=$(date +%s)
 while true; do
   # Get the current number of active SSH user connections
   #current_user_count=$(who | grep -c "pts/")
-  current_user_count=$(ps aux | grep -c "sshd: runner@")
+  current_user_count=$(ps x | grep sshd | grep -c @)
 
   if [ $current_user_count -gt 0 ]; then
     # Users are connected
