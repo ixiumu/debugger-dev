@@ -9,9 +9,6 @@ timeout_seconds=$((timeout * 60))
 # Get current timestamp
 start_time=$(date +%s)
 
-# Initialize user connection count
-user_count=0
-
 # Loop to check user connection status
 while true; do
   # Get the current number of active SSH user connections
@@ -22,35 +19,21 @@ while true; do
 
   if [ $current_user_count -gt 0 ]; then
     # Users are connected
-    if [ $user_count -eq 0 ]; then
-      # Update user connection count and start timestamp
-      user_count=$current_user_count
-      start_time=$(date +%s)
-    fi
+    start_time=$(date +%s)
   else
-    # No users are connected
-    if [ $user_count -gt 0 ]; then
-      # Update user connection count and end timestamp
-      user_count=0
-      end_time=$(date +%s)
+    # Calculate connection duration
+    end_time=$(date +%s)
+    duration=$((end_time - start_time))
 
-      # Calculate connection duration
-      duration=$((end_time - start_time))
+    echo $duration
 
-      echo $duration
-
-      if [ $duration -ge $timeout_seconds ]; then
-        # Connection duration exceeds the set timeout, exit the script
-        break
-      fi
-    else
-      # Reset start_time when all users are disconnected
-      start_time=$(date +%s)
+    if [ $duration -ge $timeout_seconds ]; then
+      # Connection duration exceeds the set timeout, exit the script
+      echo "All users have disconnected for more than ${timeout} minutes. "
+      break
     fi
   fi
 
   # Wait for 1 minute (60 seconds) and check user connection status again
   sleep 60
 done
-
-echo "All users have disconnected for more than ${timeout} minutes. Exiting the script."
