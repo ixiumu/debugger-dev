@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Set script timeout (minutes)
+timeout=1
+
 # Convert timeout to seconds
-timeout_seconds=$((2 * 60))
+timeout_seconds=$((timeout * 60))
 
 # Get current timestamp
 start_time=$(date +%s)
@@ -34,6 +37,8 @@ while true; do
       # Calculate connection duration
       duration=$((end_time - start_time))
 
+      echo $duration
+
       if [ $duration -ge $timeout_seconds ]; then
         # Connection duration exceeds the set timeout, exit the script
         break
@@ -45,4 +50,4 @@ while true; do
   sleep 60
 done
 
-echo "All users have disconnected for more than 30 minutes. Exiting the script."
+echo "All users have disconnected for more than ${timeout} minutes. Exiting the script."
