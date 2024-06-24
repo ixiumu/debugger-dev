@@ -65,7 +65,7 @@ ssh-keygen -q -f ssh_host_rsa_key -N ''
 echo "$fingerprint"
 
 echo 'Creating SSH server config...'
-sed "s,\$PWD,$PWD,;s,\$USER,$USER," sshd_config.template > sshd_config
+sed "s,\$PWD,$PWD,;s,\$USER,$USER," $(dirname $(readlink -f "$0"))/sshd_config.template > sshd_config
 
 echo 'Starting SSH server...'
 /usr/sbin/sshd -f sshd_config -D &
