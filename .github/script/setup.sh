@@ -6,12 +6,14 @@
 #
 # - `GITHUB_ACTION_PATH`: path to this repository.
 # - `GITHUB_ACTOR`: GitHub username of whoever triggered the action.
-# - `GITHUB_WORKSPACE`: default path for the workflow (the tmux session will start there).
+# - `GITHUB_WORKSPACE`: default path for the workflow.
 #
 
 notify_func() {
     cat
 }
+
+SCRIPT_PATH=$(dirname $(readlink -f "$0"))
 
 # Check non-coreutils dependencies
 EXTERNAL_DEPS="curl jq ssh-keygen"
@@ -48,14 +50,14 @@ ssh-keygen -q -f ssh_host_rsa_key -N ''
 echo "$fingerprint"
 
 echo 'Creating SSH server config...'
-sed "s,\$PWD,$PWD,;s,\$USER,$USER," $(dirname $(readlink -f "$0"))/sshd_config.template > sshd_config
+sed "s,\$PWD,$PWD,;s,\$USER,$USER," "$SCRIPT_PATH/sshd_config.template" > sshd_config
 
 echo 'Starting SSH server...'
 /usr/sbin/sshd -f sshd_config -D &
 sshd_pid=$!
 
-echo 'Starting tmux session...'
-(cd "$GITHUB_WORKSPACE" && tmux new-session -d -s debug)
+#echo 'Starting tmux session...'
+#(cd "$GITHUB_WORKSPACE" && tmux new-session -d -s debug)
 
 # Use `sed -u` (unbuffered) otherwise logs don't show up in the UI
 echo 'Starting Cloudflare tunnel...'
@@ -69,13 +71,11 @@ cloudflared_pid=$!
 # don't) but it'll also exit when all tmux sessions are over, which is
 # fine with us!
 #
-tmux wait-for channel
+#tmux wait-for channel
+
+"$SCRIPT_PATH/wait.sh"
 
 echo 'Session ended'
 
 kill "$cloudflared_pid"
 kill "$sshd_pid"
-
-if [ -s /tmp/ix-io.txt ]; then
-    curl -u "$IX_USERNAME:$IX_PASSWORD" -X DELETE "$(cat /tmp/ix-io.txt)"
-fi
