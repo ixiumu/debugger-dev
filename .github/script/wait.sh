@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set script timeout (minutes)
-timeout=1
+timeout=30
 
 # Convert timeout to seconds
 timeout_seconds=$((timeout * 60))
@@ -43,6 +43,9 @@ while true; do
         # Connection duration exceeds the set timeout, exit the script
         break
       fi
+    else
+      # Reset start_time when all users are disconnected
+      start_time=$(date +%s)
     fi
   fi
 
